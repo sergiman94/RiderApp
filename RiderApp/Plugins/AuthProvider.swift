@@ -6,11 +6,19 @@
 //  Copyright © 2018 smm. All rights reserved.
 //
 
+/*
+ Esta clase contiene las autenticaciones de las cuentas ligadas a la base de datos
+ de firebase, sus verificaciones y demás.
+*/
+
 import Foundation
 import FirebaseAuth
 
+// Handler que contiene los mensajes al momento de ingresar a la aplicacion
 typealias LoginHandler = (_ msg: String?) -> Void
 
+// Estructura que contiene los distintos errores que pueden mostrarse en la autenticacion,
+// registro o ingreso a la aplicacio
 struct LoginErrorCode {
     
     static let INVALID_EMAIL = "Invalid Email Adress, Please Provide A Real Email Adress"
@@ -30,6 +38,7 @@ class AuthProvider{
         return _instance
     }
     
+    // Funcion que gestiona el ingreso del ususario a la aplicacion
     func login (withEmail: String, password: String, loginHandler: LoginHandler? ){
         
         Auth.auth().signIn(withEmail: withEmail, password: password) { (user, error) in
@@ -46,6 +55,7 @@ class AuthProvider{
         }
     }
     
+    //Funcion que gestiona el registro del usuario otrogando una clave automatica
     func signUp(withEmail: String, password: String, loginHandler: LoginHandler?){
         
         Auth.auth().createUser(withEmail: withEmail, password: password) { (user, error) in
@@ -70,6 +80,7 @@ class AuthProvider{
         
     }
     
+    // funcion que cierra la sesion del usuario
     func logOut() -> Bool{
         
         if Auth.auth().currentUser != nil {
@@ -85,7 +96,7 @@ class AuthProvider{
     }
     
     
-    
+    // funcion que contiene los distintos errores que pueden aparecer al momento de la autenticacion del usuario
     private func handlerErrors(err: NSError, loginHandler: LoginHandler? ){
         
         if let errCode = AuthErrorCode(rawValue: err.code) {
